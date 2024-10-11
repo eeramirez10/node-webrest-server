@@ -1,0 +1,27 @@
+### Get
+http://localhost:3000/api/todos
+
+
+### Get by id
+http://localhost:3000/api/todos/2
+
+
+### Create
+POST http://localhost:3000/api/todos
+Content-Type: application/json
+
+{
+  "text":"swim"
+
+}
+
+### Update todo
+PUT http://localhost:3000/api/todos/2
+Content-Type: application/json
+
+{
+  "text":"sprint"
+}
+
+### Delete todo 
+DELETE http://localhost:3000/api/todos/1
