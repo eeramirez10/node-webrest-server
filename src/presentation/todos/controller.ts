@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { prisma } from "../../data/postgres";
 import { error } from "console";
-import { CreateTodoDTO } from "../../domain/dtos";
+import { CreateTodoDTO, UpdateTodoDTO } from "../../domain/dtos";
 
 
 // let todos = [
@@ -43,10 +43,10 @@ export class TodoController {
 
     const [error, createTodoDto] = CreateTodoDTO.create(req.body)
 
-    if(error !== undefined) return res.status(400).json({ error })
+    if (error !== undefined) return res.status(400).json({ error })
 
 
-    const todo = await prisma.todo.create({ data: createTodoDto!.toPlainObject()})
+    const todo = await prisma.todo.create({ data: createTodoDto!.toPlainObject() })
 
     return res.json(todo)
   }
@@ -74,30 +74,16 @@ export class TodoController {
 
     const id = +req.params.id
 
-    if (!Number(id)) return res.status(400).json({ msg: 'Not a number' })
+    const [error, updateTodoDTO] = UpdateTodoDTO.create({ ...req.body, id })
 
+    if (error) return res.status(400).json({ error })
 
-    const { text } = req.body
-
-    if (!text) return res.status(400).json({ error: 'Text property is required' })
 
     const findTodo = await prisma.todo.findMany({ where: { id } })
 
-    if (Object.keys(findTodo).length === 0) return res.status(400).json({ error: 'todo not find' })
+    if (Object.keys(findTodo).length === 0) return res.status(404).json({ error: 'todo not found' })
 
-    // let todo = todos[findTodo]
-
-    // todo = {
-    //   id: todo.id,
-    //   text,
-    //   date: todo.date
-    // }
-
-    // todos[findTodo] = todo
-
-    // todos = [...todos]
-
-    const todo = await prisma.todo.update({ data: { text }, where: { id } })
+    const todo = await prisma.todo.update({ data: updateTodoDTO!.values(), where: { id } })
 
 
     res.json(todo)

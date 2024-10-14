@@ -11,16 +11,17 @@ POST http://localhost:3000/api/todos
 Content-Type: application/json
 
 {
-  "text":"swim"
+  "text":"read"
 
 }
 
 ### Update todo
-PUT http://localhost:3000/api/todos/2
+PUT http://localhost:3000/api/todos/1
 Content-Type: application/json
 
 {
-  "text":"sprint"
+  "text":"swim"
+  
 }
 
 ### Delete todo 
